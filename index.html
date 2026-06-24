@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>花蓮高中 AI 教學策略</title>
+<style>
+  :root {
+    --dark:    #0D2137;
+    --teal:    #0E7490;
+    --teal2:   #06B6D4;
+    --mint:    #CCFBF1;
+    --gold:    #FBBF24;
+    --warn:    #F97316;
+    --white:   #FFFFFF;
+    --offwht:  #F0FAFA;
+    --gray:    #64748B;
+    --card:    #132B3F;
+    --card2:   #0F3549;
+    --text:    #1E293B;
+    --radius:  12px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Segoe UI', 'PingFang TC', 'Noto Sans TC', sans-serif;
+    background: var(--dark);
+    color: var(--white);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,33,55,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--teal2);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    height: 56px;
+    overflow-x: auto;
+  }
+  nav .brand {
+    font-weight: 800; font-size: 0.85rem;
+    color: var(--teal2); white-space: nowrap; margin-right: auto;
+    letter-spacing: 0.05em;
+  }
+  nav a {
+    color: var(--white); text-decoration: none;
+    font-size: 0.82rem; white-space: nowrap;
+    opacity: 0.75; transition: opacity 0.2s;
+    padding: 4px 0;
+  }
+  nav a:hover { opacity: 1; color: var(--teal2); }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100svh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 6rem 2rem 4rem;
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #0D2137 60%, #0F3549);
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -120px; right: -120px;
+    width: 520px; height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -60px; left: -60px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(14,116,144,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 860px; position: relative; }
+  .hero-eyebrow {
+    font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--teal2); font-weight: 700; margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: inline-block;
+    width: 32px; height: 2px; background: var(--teal2);
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 800; line-height: 1.15;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+  .hero h1 span { color: var(--teal2); }
+  .hero-sub {
+    font-size: 1.1rem; color: var(--mint); margin-bottom: 0.5rem;
+    font-style: italic; opacity: 0.9;
+  }
+  .hero-meta {
+    font-size: 0.85rem; color: var(--gray); margin-bottom: 2rem;
+  }
+  .hero-source {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(6,182,212,0.12); border: 1px solid rgba(6,182,212,0.3);
+    border-radius: 8px; padding: 0.6rem 1rem;
+    font-size: 0.82rem; color: var(--teal2); margin-bottom: 2.5rem;
+  }
+  .hero-cta {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.5rem; border-radius: 8px;
+    font-size: 0.9rem; font-weight: 700; cursor: pointer;
+    text-decoration: none; transition: all 0.2s;
+    border: none;
+  }
+  .btn-primary { background: var(--teal2); color: var(--dark); }
+  .btn-primary:hover { background: var(--mint); }
+  .btn-outline { background: transparent; color: var(--white); border: 2px solid var(--teal2); }
+  .btn-outline:hover { background: rgba(6,182,212,0.1); }
+
+  /* ── Sections ── */
+  section { padding: 5rem 2rem; }
+  .section-inner { max-width: 1080px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--teal2); font-weight: 700; margin-bottom: 0.5rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .section-label::before {
+    content: ''; display: inline-block; width: 24px; height: 2px; background: var(--teal2);
+  }
+  .section-title {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;
+  }
+  .section-sub {
+    font-size: 1rem; color: var(--gray); margin-bottom: 3rem;
+    font-style: italic;
+  }
+
+  /* ── Stats section ── */
+  #stats { background: linear-gradient(135deg, #0F3549, #0D2137); }
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+  .stat-card {
+    background: var(--card2);
+    border: 1px solid rgba(6,182,212,0.2);
+    border-radius: var(--radius);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(6,182,212,0.15);
+  }
+  .stat-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .stat-val {
+    font-size: 3rem; font-weight: 900; color: var(--gold);
+    line-height: 1; margin-bottom: 0.5rem;
+  }
+  .stat-label { font-size: 0.95rem; color: var(--white); margin-bottom: 0.4rem; }
+  .stat-src { font-size: 0.75rem; color: var(--gray); font-style: italic; }
+
+  /* ── Opportunities & Risks ── */
+  #findings { background: var(--offwht); color: var(--text); }
+  #findings .section-label::before { background: var(--teal); }
+  #findings .section-label { color: var(--teal); }
+  #findings .section-title { color: var(--dark); }
+  #findings .section-sub { color: var(--gray); }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  @media(max-width:680px) { .two-col { grid-template-columns: 1fr; } }
+  .opp-card, .risk-card {
+    border-radius: var(--radius); padding: 1.5rem;
+  }
+  .opp-card { background: #E0F7FA; }
+  .risk-card { background: #FFF3E0; }
+  .opp-card h3 { color: var(--teal); margin-bottom: 1rem; font-size: 1.1rem; }
+  .risk-card h3 { color: var(--warn); margin-bottom: 1rem; font-size: 1.1rem; }
+  .item-row {
+    display: flex; align-items: center; gap: 0.75rem;
+    background: rgba(255,255,255,0.6); border-radius: 8px;
+    padding: 0.6rem 1rem; margin-bottom: 0.6rem;
+    font-size: 0.92rem; color: var(--text);
+  }
+  .dot-opp { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+  .dot-risk { width: 8px; height: 8px; border-radius: 50%; background: var(--warn); flex-shrink: 0; }
+
+  /* ── Core Principles ── */
+  #principles { background: var(--dark); }
+  .principle-banner {
+    background: var(--teal); border-radius: var(--radius);
+    padding: 1.2rem 2rem; text-align: center;
+    font-size: 1.2rem; font-weight: 800; color: var(--white);
+    margin-bottom: 2.5rem;
+  }
+  .principles-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+  .principle-card {
+    background: var(--card2); border-radius: var(--radius);
+    padding: 2rem 1.5rem; text-align: center;
+    transition: transform 0.25s;
+  }
+  .principle-card:hover { transform: translateY(-4px); }
+  .principle-icon { font-size: 2.4rem; margin-bottom: 1rem; }
+  .principle-card h3 { color: var(--gold); font-size: 1.05rem; margin-bottom: 0.5rem; }
+  .principle-card p { font-size: 0.88rem; color: rgba(255,255,255,0.75); }
+
+  /* ── Strategies ── */
+  #strategies { background: #F0FAFA; color: var(--text); }
+  #strategies .section-label { color: var(--teal); }
+  #strategies .section-label::before { background: var(--teal); }
+  #strategies .section-title { color: var(--dark); }
+  #strategies .section-sub { color: var(--gray); }
+  .strategy-card {
+    border-radius: var(--radius); overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    margin-bottom: 1.5rem;
+  }
+  .strategy-header {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1rem 1.5rem; font-weight: 800; font-size: 1.05rem;
+    color: var(--white);
+  }
+  .strategy-body {
+    background: var(--white); padding: 1.2rem 1.5rem;
+  }
+  .strategy-item {
+    display: flex; align-items: flex-start; gap: 0.6rem;
+    padding: 0.4rem 0; font-size: 0.95rem; color: var(--text);
+  }
+  .strategy-dot { color: var(--teal2); font-weight: 900; flex-shrink: 0; margin-top: 2px; }
+
+  /* ── Phases ── */
+  #phases { background: var(--dark); }
+  .phases-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  .phase-card {
+    background: var(--card2); border-radius: var(--radius);
+    padding: 2rem; text-align: center;
+    border-top: 4px solid var(--teal2);
+    transition: box-shadow 0.25s;
+  }
+  .phase-card:nth-child(2) { border-top-color: var(--gold); }
+  .phase-card:nth-child(3) { border-top-color: var(--mint); }
+  .phase-card:hover { box-shadow: 0 8px 32px rgba(6,182,212,0.2); }
+  .phase-num {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--teal2); color: var(--dark);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; font-weight: 900;
+    margin: 0 auto 1rem;
+  }
+  .phase-card:nth-child(2) .phase-num { background: var(--gold); }
+  .phase-card:nth-child(3) .phase-num { background: var(--mint); }
+  .phase-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal2); margin-bottom: 0.25rem; }
+  .phase-card:nth-child(2) .phase-label { color: var(--gold); }
+  .phase-card:nth-child(3) .phase-label { color: var(--mint); }
+  .phase-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 0.25rem; }
+  .phase-time { font-size: 0.8rem; color: var(--gray); font-style: italic; margin-bottom: 1.2rem; }
+  .phase-item { font-size: 0.9rem; color: rgba(255,255,255,0.8); padding: 0.3rem 0; }
+
+  /* ── Students ── */
+  #students { background: var(--offwht); color: var(--text); }
+  #students .section-label { color: var(--teal); }
+  #students .section-label::before { background: var(--teal); }
+  #students .section-title { color: var(--dark); }
+  #students .section-sub { color: var(--gray); }
+  .students-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;
+  }
+  @media(max-width:680px) { .students-grid { grid-template-columns: 1fr; } }
+  .competency-item {
+    display: grid; grid-template-columns: 120px 1fr;
+    background: var(--white); border-radius: 10px;
+    overflow: hidden; margin-bottom: 1rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .comp-label {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; font-weight: 800; color: var(--white);
+    padding: 1rem 0.5rem; text-align: center;
+  }
+  .comp-desc { padding: 1rem; font-size: 0.9rem; color: var(--text); }
+  .oecd-warning {
+    background: var(--dark); border-radius: var(--radius);
+    padding: 2rem; color: var(--white); text-align: center;
+  }
+  .oecd-warning .warn-label { font-size: 0.85rem; color: var(--warn); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+  .oecd-warning p { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.85); }
+  .student-goal {
+    grid-column: 1 / -1;
+    background: var(--teal); color: var(--white);
+    border-radius: 10px; padding: 1.2rem 2rem;
+    text-align: center; font-weight: 800; font-size: 1.1rem;
+  }
+
+  /* ── Declaration ── */
+  #declaration { background: var(--dark); }
+  .declaration-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+  .decl-card {
+    background: var(--card2); border-radius: var(--radius);
+    padding: 2rem 1.5rem; text-align: center;
+  }
+  .decl-icon { font-size: 2.4rem; margin-bottom: 0.75rem; }
+  .decl-card h3 { color: var(--gold); font-size: 1.05rem; margin-bottom: 1rem; }
+  .decl-item {
+    background: rgba(255,255,255,0.06); border-radius: 8px;
+    padding: 0.6rem 0.8rem; margin-bottom: 0.6rem;
+    font-size: 0.85rem; color: rgba(255,255,255,0.85);
+  }
+
+  /* ── Closing ── */
+  #closing {
+    background: var(--dark); text-align: center; padding: 6rem 2rem;
+    border-top: 1px solid rgba(6,182,212,0.2);
+  }
+  .closing-quote {
+    font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 900;
+    line-height: 1.25; color: var(--white); margin-bottom: 0.75rem;
+  }
+  .closing-src { font-size: 0.9rem; color: var(--gray); font-style: italic; margin-bottom: 2rem; }
+  .closing-mission {
+    font-size: 1.1rem; color: var(--teal2); font-weight: 700; margin-bottom: 3rem;
+  }
+
+  /* ── Footer ── */
+  footer {
+    background: rgba(0,0,0,0.3); padding: 1.5rem 2rem;
+    text-align: center; font-size: 0.8rem; color: var(--gray);
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* ── Animations ── */
+  @media(prefers-reduced-motion: no-preference) {
+    .fade-in {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: none; }
+  }
+
+  /* ── Responsive ── */
+  @media(max-width:700px) {
+    .hero { padding: 5rem 1.2rem 3rem; }
+    section { padding: 3.5rem 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">🎓 花蓮高中 AI 教學策略</div>
+  <a href="#stats">現況</a>
+  <a href="#findings">研究發現</a>
+  <a href="#principles">核心原則</a>
+  <a href="#strategies">四大策略</a>
+  <a href="#phases">增能計畫</a>
+  <a href="#students">學生素養</a>
+  <a href="#levels">AI 分級</a>
+  <a href="#declaration">行動宣言</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-inner fade-in visible">
+    <div class="hero-eyebrow">國立花蓮高級中學 · 2026 學年度</div>
+    <h1>AI 教學策略<br><span>全校說明會</span></h1>
+    <p class="hero-sub">Generative AI 時代的教與學策略</p>
+    <p class="hero-meta">教師、家長及學生代表共同參與</p>
+    <div class="hero-source">
+      📖 資料來源：OECD Digital Education Outlook 2026
+    </div>
+    <div class="hero-cta">
+      <a href="#strategies" class="btn btn-primary">查看教學策略 →</a>
+      <a href="#declaration" class="btn btn-outline">行動宣言</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="section-inner">
+    <div class="section-label">01 · AI 浪潮已至</div>
+    <h2 class="section-title">現況與數據</h2>
+    <p class="section-sub">ChatGPT 問世僅 3 年，已徹底改變教室生態</p>
+    <div class="stats-grid">
+      <div class="stat-card fade-in">
+        <div class="stat-icon">👩‍🏫</div>
+        <div class="stat-val">37%</div>
+        <div class="stat-label">教師已在工作中使用 AI 工具</div>
+        <div class="stat-src">OECD TALIS 2024</div>
+      </div>
+      <div class="stat-card fade-in">
+        <div class="stat-icon">🚀</div>
+        <div class="stat-val">2×</div>
+        <div class="stat-label">ChatGPT 用戶 2024→2025 倍增</div>
+        <div class="stat-src">OpenAI 2025 報告</div>
+      </div>
+      <div class="stat-card fade-in">
+        <div class="stat-icon">🆓</div>
+        <div class="stat-val">FREE</div>
+        <div class="stat-label">多數工具免費，無需任何技術背景</div>
+        <div class="stat-src">OECD DEO 2026</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:2.5rem;font-size:1.05rem;color:var(--mint);font-weight:700;">
+      不是「要不要用」，而是「如何有目的地用」
+    </div>
+  </div>
+</section>
+
+<!-- FINDINGS -->
+<section id="findings">
+  <div class="section-inner">
+    <div class="section-label">02 · 機會與風險並存</div>
+    <h2 class="section-title" style="color:var(--dark)">OECD 核心研究發現</h2>
+    <p class="section-sub">Digital Education Outlook 2026 的重要警示</p>
+    <div class="two-col">
+      <div class="opp-card fade-in">
+        <h3>✅ 機會 Opportunities</h3>
+        <div class="item-row"><div class="dot-opp"></div>個人化學習與即時回饋</div>
+        <div class="item-row"><div class="dot-opp"></div>教師行政工作大幅減輕</div>
+        <div class="item-row"><div class="dot-opp"></div>AI 擔任創意協作夥伴</div>
+        <div class="item-row"><div class="dot-opp"></div>虛擬導師輔助學生解題</div>
+        <div class="item-row"><div class="dot-opp"></div>新手教師培訓工具</div>
+      </div>
+      <div class="risk-card fade-in">
+        <h3>⚠ 風險 Risks</h3>
+        <div class="item-row"><div class="dot-risk"></div>後設認知懶惰（不思考）</div>
+        <div class="item-row"><div class="dot-risk"></div>假精熟幻覺（高分低能）</div>
+        <div class="item-row"><div class="dot-risk"></div>認知耐力與深度閱讀退化</div>
+        <div class="item-row"><div class="dot-risk"></div>作業成績 ≠ 考試能力</div>
+        <div class="item-row"><div class="dot-risk"></div>學生自主思考能力下降</div>
+      </div>
+    </div>
+    <div style="background:#E0F7FA;border-radius:10px;padding:1.2rem 1.8rem;margin-top:2rem;border-left:4px solid var(--teal);">
+      <strong style="color:var(--teal)">研究關鍵發現：</strong>
+      <span style="color:var(--text)">學生使用通用 AI 工具後，作業品質上升，但考試成績反而下降。任務完成 ≠ 學習發生。</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRINCIPLES -->
+<section id="principles">
+  <div class="section-inner">
+    <div class="section-label">03 · 核心原則</div>
+    <h2 class="section-title">花蓮高中 AI 教學核心原則</h2>
+    <p class="section-sub">所有 AI 導入計畫都必須符合這四個原則</p>
+    <div class="principle-banner fade-in">
+      AI 輔助學習，而非取代學習過程
+    </div>
+    <div class="principles-grid">
+      <div class="principle-card fade-in">
+        <div class="principle-icon">💡</div>
+        <h3>有目的性</h3>
+        <p>每次 AI 使用<br>需有明確教學目標</p>
+      </div>
+      <div class="principle-card fade-in">
+        <div class="principle-icon">📚</div>
+        <h3>以人為本</h3>
+        <p>教師專業判斷<br>不可被 AI 取代</p>
+      </div>
+      <div class="principle-card fade-in">
+        <div class="principle-icon">⚖️</div>
+        <h3>嚴格評選</h3>
+        <p>優先使用<br>教育專用工具</p>
+      </div>
+      <div class="principle-card fade-in">
+        <div class="principle-icon">🛡️</div>
+        <h3>倫理優先</h3>
+        <p>隱私、公平、<br>透明為基本原則</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STRATEGIES -->
+<section id="strategies">
+  <div class="section-inner">
+    <div class="section-label">03 · 教學策略</div>
+    <h2 class="section-title">花蓮高中四大 AI 教學策略方向</h2>
+    <p class="section-sub">環環相扣，缺一不可的整體架構</p>
+
+    <div class="strategy-card fade-in">
+      <div class="strategy-header" style="background:#0D9488">
+        🧠 策略一：AI 輔助，保留認知主體
+      </div>
+      <div class="strategy-body">
+        <div class="strategy-item"><span class="strategy-dot">▸</span> 課堂仍以學生思考為核心，AI 提供提示但不直接給出答案</div>
+        <div class="strategy-item"><span class="strategy-dot">▸</span> 強化後設認知訓練——教導學生反思自己的學習歷程</div>
+        <div class="strategy-item"><span class="strategy-dot">▸</span> 保留有生產性的「認知掙扎」，這是學習深化的必要過程</div>
+      </div>
+    </div>
+
+    <div class="strategy-card fade-in">
+      <div class="strategy-header" style="background:#0E7490">
+        👩‍🏫 策略二：教師優先增能
+      </div>
+      <div class="strategy-body">
+        <div class="strategy-item"><span class="strategy-dot">▸</span> 成立 AI 工具評選委員會，由教師主導評估與選用</div>
+        <div class="strategy-item"><span class="strategy-dot">▸</span> 每學期至少 2 場 AI 應用研習，形式多元（工作坊、共備、觀課）</div>
+        <div class="strategy-item"><span class="strategy-dot">▸</span> 跨科共備 AI 融入課程設計，分享最佳實踐</div>
+      </div>
+    </div>
+
+    <div class="strategy-card fade-in">
+      <div class="strategy-header" style="background:#0369A1">
+        🎓 策略三：學生 AI 素養課程
+      </div>
+      <div class="strategy-body">
+        <div class="strategy-item"><span class="strategy-dot">▸</span> 辨識 AI 錯誤與偏見，培養批判性資訊素養</div>
+        <div class="strategy-item"><span class="strategy-dot">▸</span> 提示詞工程基礎訓練，讓學生成為有效的 AI 使用者</div>
+        <div class="strategy-item"><span class="strategy-dot">▸</span> 學術誠信與 AI 倫理教育，建立正確使用規範</div>
+      </div>
+    </div>
+
+    <div class="strategy-card fade-in">
+      <div class="strategy-header" style="background:#6D28D9">
+        🏛 策略四：制度化治理框架
+      </div>
+      <div class="strategy-body">
+        <div class="strategy-item"><span class="strategy-dot">▸</span> 公告學校 AI 使用政策，明確可用範圍與邊界</div>
+        <div class="strategy-item"><span class="strategy-dot">▸</span> 辦理家長說明會，蒐集意見並納入決策</div>
+        <div class="strategy-item"><span class="strategy-dot">▸</span> 每學期定期評估成效，依據數據調整策略</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHASES -->
+<section id="phases">
+  <div class="section-inner">
+    <div class="section-label">04 · 教師增能計畫</div>
+    <h2 class="section-title">三階段滾動推進</h2>
+    <p class="section-sub">每位教師都是 AI 時代的學習領航者</p>
+    <div class="phases-grid">
+      <div class="phase-card fade-in">
+        <div class="phase-num">1</div>
+        <div class="phase-label">Phase 1</div>
+        <div class="phase-title">認識與體驗</div>
+        <div class="phase-time">114 學年 上學期</div>
+        <div class="phase-item">· 基礎 AI 工具介紹</div>
+        <div class="phase-item">· 實作工作坊（6hr）</div>
+        <div class="phase-item">· AI 備課實驗</div>
+      </div>
+      <div class="phase-card fade-in">
+        <div class="phase-num">2</div>
+        <div class="phase-label">Phase 2</div>
+        <div class="phase-title">融入課堂設計</div>
+        <div class="phase-time">114 學年 下學期</div>
+        <div class="phase-item">· 課程 AI 融入設計</div>
+        <div class="phase-item">· 跨科協作共備</div>
+        <div class="phase-item">· 學生反饋分析</div>
+      </div>
+      <div class="phase-card fade-in">
+        <div class="phase-num">3</div>
+        <div class="phase-label">Phase 3</div>
+        <div class="phase-title">深化與分享</div>
+        <div class="phase-time">115 學年</div>
+        <div class="phase-item">· 校內最佳實踐分享</div>
+        <div class="phase-item">· 教師 AI 認證計畫</div>
+        <div class="phase-item">· 社群持續共學</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STUDENTS -->
+<section id="students">
+  <div class="section-inner">
+    <div class="section-label">05 · 學生 AI 素養</div>
+    <h2 class="section-title">學生 AI 素養培育</h2>
+    <p class="section-sub">培育能與 AI 協作、又不被 AI 取代的新世代學習者</p>
+    <div class="students-grid">
+      <div>
+        <div class="competency-item fade-in">
+          <div class="comp-label" style="background:#0D9488">技術素養</div>
+          <div class="comp-desc">理解 AI 運作原理<br>學會有效提示詞撰寫</div>
+        </div>
+        <div class="competency-item fade-in">
+          <div class="comp-label" style="background:#0E7490">批判思維</div>
+          <div class="comp-desc">識別 AI 錯誤與偏見<br>不盲目接受 AI 輸出</div>
+        </div>
+        <div class="competency-item fade-in">
+          <div class="comp-label" style="background:#0369A1">倫理意識</div>
+          <div class="comp-desc">學術誠信與著作權<br>AI 使用的道德界線</div>
+        </div>
+        <div class="competency-item fade-in">
+          <div class="comp-label" style="background:#6D28D9">創造力</div>
+          <div class="comp-desc">以 AI 為工具展現<br>人類獨特的創意思考</div>
+        </div>
+      </div>
+      <div>
+        <div class="oecd-warning fade-in">
+          <div class="warn-label">⚠ OECD 研究警示</div>
+          <p>過度依賴 AI 會導致「後設認知懶惰」。學生完成任務但失去獨立思考的能力。</p>
+          <p style="margin-top:1rem;font-size:0.85rem;color:var(--gray)">研究發現：使用通用 AI 工具的學生作業品質上升，但實際測驗表現卻下滑。</p>
+        </div>
+      </div>
+      <div class="student-goal">
+        目標：培育能與 AI 協作、又不被 AI 取代的新世代學習者
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI LEVELS -->
+<section id="levels" style="background:var(--dark)">
+  <div class="section-inner">
+    <div class="section-label">06 · AI 使用分級</div>
+    <h2 class="section-title">AI 使用分級架構</h2>
+    <p class="section-sub">依學習任務選對等級，是有效使用 AI 的關鍵</p>
+
+    <!-- axis -->
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.2rem;">
+      <span style="font-size:0.78rem;color:var(--gray);white-space:nowrap">人類主導</span>
+      <div style="flex:1;height:3px;background:linear-gradient(to right,#DC2626,#D97706,#7C3AED,#0E7490,#6366F1);border-radius:2px"></div>
+      <span style="font-size:0.78rem;color:#6366F1;font-weight:700;white-space:nowrap">AI 主導 ▶</span>
+    </div>
+
+    <!-- level cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem">
+
+      <!-- L1 紅 #DC2626 -->
+      <div class="fade-in" style="background:var(--card2);border-radius:var(--radius);overflow:hidden;transition:transform .25s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+        <div style="background:#DC2626;padding:0.8rem 1rem 0.6rem">
+          <span style="font-size:1.3rem;font-weight:900;color:#fff">L1</span>
+          <div style="font-size:0.95rem;font-weight:700;color:#fff;margin-top:0.1rem">不使用 AI</div>
+        </div>
+        <div style="padding:0.8rem 1rem">
+          <div style="display:inline-block;background:#FEE2E2;color:#DC2626;font-size:0.72rem;font-weight:700;padding:2px 10px;border-radius:20px;margin-bottom:0.7rem">認知基礎</div>
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.8);line-height:1.8">
+            <div>· 深度閱讀、寫作草稿</div>
+            <div>· 數學推演、考前複習</div>
+            <div>· 建立認知耐力</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- L2 琥珀 #D97706 -->
+      <div class="fade-in" style="background:var(--card2);border-radius:var(--radius);overflow:hidden;transition:transform .25s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+        <div style="background:#D97706;padding:0.8rem 1rem 0.6rem">
+          <span style="font-size:1.3rem;font-weight:900;color:#fff">L2</span>
+          <div style="font-size:0.95rem;font-weight:700;color:#fff;margin-top:0.1rem">查詢工具</div>
+        </div>
+        <div style="padding:0.8rem 1rem">
+          <div style="display:inline-block;background:#FEF3C7;color:#B45309;font-size:0.72rem;font-weight:700;padding:2px 10px;border-radius:20px;margin-bottom:0.7rem">知識擴充</div>
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.8);line-height:1.8">
+            <div>· 查資料、確認事實</div>
+            <div>· 翻譯輔助、名詞解釋</div>
+            <div>· 思考仍由學生主導</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- L3 紫 #7C3AED ★最推薦 -->
+      <div class="fade-in" style="background:var(--card2);border-radius:var(--radius);overflow:hidden;transition:transform .25s;box-shadow:0 0 0 2px #7C3AED" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+        <div style="background:#7C3AED;padding:0.8rem 1rem 0.6rem;position:relative">
+          <span style="position:absolute;top:0.4rem;right:0.6rem;background:#fff;color:#7C3AED;font-size:0.65rem;font-weight:800;padding:1px 7px;border-radius:20px">★ 最推薦</span>
+          <span style="font-size:1.3rem;font-weight:900;color:#fff">L3</span>
+          <div style="font-size:0.95rem;font-weight:700;color:#fff;margin-top:0.1rem">學習夥伴</div>
+        </div>
+        <div style="padding:0.8rem 1rem">
+          <div style="display:inline-block;background:#EDE9FE;color:#7C3AED;font-size:0.72rem;font-weight:700;padding:2px 10px;border-radius:20px;margin-bottom:0.7rem">最佳協作模式</div>
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.8);line-height:1.8">
+            <div>· 對話辯證、激發思考</div>
+            <div>· 議題探究、腦力激盪</div>
+            <div>· 學生主導對話方向</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- L4 青藍 #0E7490 -->
+      <div class="fade-in" style="background:var(--card2);border-radius:var(--radius);overflow:hidden;transition:transform .25s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+        <div style="background:#0E7490;padding:0.8rem 1rem 0.6rem">
+          <span style="font-size:1.3rem;font-weight:900;color:#fff">L4</span>
+          <div style="font-size:0.95rem;font-weight:700;color:#fff;margin-top:0.1rem">輔助生產</div>
+        </div>
+        <div style="padding:0.8rem 1rem">
+          <div style="display:inline-block;background:#CFFAFE;color:#0E7490;font-size:0.72rem;font-weight:700;padding:2px 10px;border-radius:20px;margin-bottom:0.7rem">需審核機制</div>
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.8);line-height:1.8">
+            <div>· 報告初稿、程式生成</div>
+            <div>· 簡報設計、資料整理</div>
+            <div>· 學生審核並負責成果</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- L5 靛紫 #6366F1 -->
+      <div class="fade-in" style="background:var(--card2);border-radius:var(--radius);overflow:hidden;transition:transform .25s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+        <div style="background:#6366F1;padding:0.8rem 1rem 0.6rem">
+          <span style="font-size:1.3rem;font-weight:900;color:#fff">L5</span>
+          <div style="font-size:0.95rem;font-weight:700;color:#fff;margin-top:0.1rem">AI 主導</div>
+        </div>
+        <div style="padding:0.8rem 1rem">
+          <div style="display:inline-block;background:#E0E7FF;color:#4338CA;font-size:0.72rem;font-weight:700;padding:2px 10px;border-radius:20px;margin-bottom:0.7rem">⚠ 高風險</div>
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.8);line-height:1.8">
+            <div>· 需明確揭露聲明</div>
+            <div>· 不得用於評量任務</div>
+            <div>· 後設認知懶惰風險</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- summary bar with 5-color segments -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);border-radius:10px;overflow:hidden;margin-bottom:1.5rem;font-size:0.78rem;font-weight:700;text-align:center">
+      <div style="background:#DC2626;color:#fff;padding:0.6rem 0.4rem">L1<br><span style="font-weight:400;font-size:0.7rem">認知保護</span></div>
+      <div style="background:#D97706;color:#fff;padding:0.6rem 0.4rem">L2<br><span style="font-weight:400;font-size:0.7rem">知識查詢</span></div>
+      <div style="background:#7C3AED;color:#fff;padding:0.6rem 0.4rem">L3 ★<br><span style="font-weight:400;font-size:0.7rem">最推薦協作</span></div>
+      <div style="background:#0E7490;color:#fff;padding:0.6rem 0.4rem">L4<br><span style="font-weight:400;font-size:0.7rem">輔助生產</span></div>
+      <div style="background:#6366F1;color:#fff;padding:0.6rem 0.4rem">L5<br><span style="font-weight:400;font-size:0.7rem">需規範</span></div>
+    </div>
+
+    <!-- usage guide table -->
+    <div style="background:var(--card2);border-radius:var(--radius);padding:1.2rem 1.5rem">
+      <div style="font-size:0.85rem;font-weight:700;color:var(--teal2);margin-bottom:0.8rem;text-transform:uppercase;letter-spacing:0.08em">任務類型 × 建議等級</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">
+        <div style="font-size:0.83rem;color:rgba(255,255,255,0.75);padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.08)">考試、測驗</div>
+        <div style="font-size:0.83rem;color:#DC2626;font-weight:700;padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.08)">L1 — 不使用 AI</div>
+        <div style="font-size:0.83rem;color:rgba(255,255,255,0.75);padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.08)">名詞查找、史料確認</div>
+        <div style="font-size:0.83rem;color:#D97706;font-weight:700;padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.08)">L2 — 查詢工具</div>
+        <div style="font-size:0.83rem;color:rgba(255,255,255,0.75);padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.08)">議題探究、創意寫作討論</div>
+        <div style="font-size:0.83rem;color:#7C3AED;font-weight:700;padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.08)">L3 — 學習夥伴 ★</div>
+        <div style="font-size:0.83rem;color:rgba(255,255,255,0.75);padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.08)">專題報告、程式作業</div>
+        <div style="font-size:0.83rem;color:#0E7490;font-weight:700;padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.08)">L4 — 輔助生產（需審核）</div>
+        <div style="font-size:0.83rem;color:rgba(255,255,255,0.75);padding:0.4rem 0">評量任務</div>
+        <div style="font-size:0.83rem;color:#6366F1;font-weight:700;padding:0.4rem 0">L5 — 禁止或需明確揭露</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DECLARATION -->
+<section id="declaration">
+  <div class="section-inner">
+    <div class="section-label">06 · 共識與行動宣言</div>
+    <h2 class="section-title">行動宣言</h2>
+    <p class="section-sub">這是全校師生家長的共同承諾</p>
+    <div class="declaration-grid">
+      <div class="decl-card fade-in">
+        <div class="decl-icon">🏛</div>
+        <h3>學校</h3>
+        <div class="decl-item">建立 AI 使用治理框架與政策</div>
+        <div class="decl-item">提供教師完整增能資源</div>
+        <div class="decl-item">定期評估成效並調整策略</div>
+      </div>
+      <div class="decl-card fade-in">
+        <div class="decl-icon">👩‍🏫</div>
+        <h3>教師</h3>
+        <div class="decl-item">以教學目的引導 AI 工具使用</div>
+        <div class="decl-item">保持專業判斷不委外給 AI</div>
+        <div class="decl-item">與學生共同探索 AI 邊界</div>
+      </div>
+      <div class="decl-card fade-in">
+        <div class="decl-icon">🎓</div>
+        <h3>學生</h3>
+        <div class="decl-item">AI 是夥伴，不是取代思考的工具</div>
+        <div class="decl-item">保持批判思維與創造自主性</div>
+        <div class="decl-item">誠信使用，誠實揭露 AI 協作</div>
+      </div>
+      <div class="decl-card fade-in">
+        <div class="decl-icon">👨‍👩‍👧</div>
+        <h3>家長</h3>
+        <div class="decl-item">理解並支持學校 AI 政策</div>
+        <div class="decl-item">與孩子討論 AI 倫理議題</div>
+        <div class="decl-item">提供意見參與學校 AI 治理</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section id="closing">
+  <div class="section-inner" style="max-width:760px;margin:0 auto">
+    <div class="closing-quote">
+      「AI 放大好教育，<br>也放大壞教育」
+    </div>
+    <div class="closing-src">— OECD Digital Education Outlook 2026</div>
+    <div class="closing-mission">
+      花蓮高中選擇：有目的、有原則、有溫度地迎接 AI 時代
+    </div>
+    <a href="#top" class="btn btn-primary" style="margin:0 auto">回到頂端 ↑</a>
+  </div>
+</section>
+
+<footer>
+  國立花蓮高級中學 · AI 教學策略說明會 · 2026 學年度<br>
+  資料依據 OECD Digital Education Outlook 2026 整理
+</footer>
+
+<script>
+  // Intersection Observer for fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
