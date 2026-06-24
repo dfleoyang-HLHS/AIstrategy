@@ -36,39 +36,72 @@
   /* ── Nav ── */
   nav {
     position: sticky; top: 0; z-index: 100;
-    background: rgba(13,33,55,0.95);
+    background: rgba(13,33,55,0.97);
     backdrop-filter: blur(12px);
     border-bottom: 2px solid var(--teal2);
-    padding: 0 2rem;
-    display: flex; align-items: center; gap: 1.5rem;
+    padding: 0 1.5rem;
+    display: flex; align-items: center;
     height: 56px;
-    overflow-x: auto;
   }
   nav .brand {
-    font-weight: 800; font-size: 0.85rem;
-    color: var(--teal2); white-space: nowrap; margin-right: auto;
-    letter-spacing: 0.05em;
+    font-weight: 800; font-size: 0.88rem;
+    color: var(--teal2); white-space: nowrap;
+    letter-spacing: 0.04em; flex: 1;
   }
-  nav a {
+  .nav-links {
+    display: flex; align-items: center; gap: 1.2rem;
+  }
+  .nav-links a {
     color: var(--white); text-decoration: none;
     font-size: 0.82rem; white-space: nowrap;
     opacity: 0.75; transition: opacity 0.2s;
     padding: 4px 0;
   }
-  nav a:hover { opacity: 1; color: var(--teal2); }
+  .nav-links a:hover { opacity: 1; color: var(--teal2); }
+  .nav-toggle {
+    display: none;
+    background: none; border: none; cursor: pointer;
+    padding: 6px; color: var(--white);
+    flex-direction: column; gap: 5px; align-items: center;
+  }
+  .nav-toggle span {
+    display: block; width: 22px; height: 2px;
+    background: var(--white); border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .nav-drawer {
+    display: none;
+    position: fixed; top: 56px; left: 0; right: 0;
+    background: rgba(13,33,55,0.98);
+    border-bottom: 1px solid rgba(6,182,212,0.2);
+    z-index: 99; padding: 1rem 1.5rem 1.5rem;
+    flex-direction: column; gap: 0;
+  }
+  .nav-drawer.open { display: flex; }
+  .nav-drawer a {
+    color: var(--white); text-decoration: none;
+    font-size: 1rem; padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    opacity: 0.85; transition: color 0.2s, opacity 0.2s;
+  }
+  .nav-drawer a:last-child { border-bottom: none; }
+  .nav-drawer a:hover { color: var(--teal2); opacity: 1; }
 
   /* ── Hero ── */
   .hero {
     min-height: 100svh;
     display: flex; flex-direction: column; justify-content: center;
-    padding: 6rem 2rem 4rem;
+    padding: 5rem 2rem 4rem;
     position: relative; overflow: hidden;
     background: linear-gradient(135deg, #0D2137 60%, #0F3549);
   }
   .hero::before {
     content: '';
     position: absolute; top: -120px; right: -120px;
-    width: 520px; height: 520px;
+    width: 420px; height: 420px;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
     pointer-events: none;
@@ -76,50 +109,52 @@
   .hero::after {
     content: '';
     position: absolute; bottom: -60px; left: -60px;
-    width: 320px; height: 320px;
+    width: 260px; height: 260px;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(14,116,144,0.15) 0%, transparent 70%);
     pointer-events: none;
   }
   .hero-inner { max-width: 860px; position: relative; }
   .hero-eyebrow {
-    font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--teal2); font-weight: 700; margin-bottom: 1.2rem;
-    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--teal2); font-weight: 700; margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
   }
   .hero-eyebrow::before {
     content: ''; display: inline-block;
-    width: 32px; height: 2px; background: var(--teal2);
+    width: 28px; height: 2px; background: var(--teal2);
+    flex-shrink: 0;
   }
   .hero h1 {
-    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-size: clamp(2rem, 7vw, 4.2rem);
     font-weight: 800; line-height: 1.15;
-    color: var(--white);
-    margin-bottom: 1rem;
+    color: var(--white); margin-bottom: 1rem;
   }
   .hero h1 span { color: var(--teal2); }
   .hero-sub {
-    font-size: 1.1rem; color: var(--mint); margin-bottom: 0.5rem;
+    font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+    color: var(--mint); margin-bottom: 0.5rem;
     font-style: italic; opacity: 0.9;
   }
   .hero-meta {
-    font-size: 0.85rem; color: var(--gray); margin-bottom: 2rem;
+    font-size: 0.85rem; color: var(--gray); margin-bottom: 1.5rem;
   }
   .hero-source {
     display: inline-flex; align-items: center; gap: 0.5rem;
     background: rgba(6,182,212,0.12); border: 1px solid rgba(6,182,212,0.3);
-    border-radius: 8px; padding: 0.6rem 1rem;
-    font-size: 0.82rem; color: var(--teal2); margin-bottom: 2.5rem;
+    border-radius: 8px; padding: 0.55rem 0.9rem;
+    font-size: 0.8rem; color: var(--teal2); margin-bottom: 2rem;
+    max-width: 100%; flex-wrap: wrap;
   }
   .hero-cta {
-    display: flex; gap: 1rem; flex-wrap: wrap;
+    display: flex; gap: 0.75rem; flex-wrap: wrap;
   }
   .btn {
     display: inline-flex; align-items: center; gap: 0.5rem;
-    padding: 0.75rem 1.5rem; border-radius: 8px;
+    padding: 0.7rem 1.3rem; border-radius: 8px;
     font-size: 0.9rem; font-weight: 700; cursor: pointer;
     text-decoration: none; transition: all 0.2s;
-    border: none;
+    border: none; white-space: nowrap;
   }
   .btn-primary { background: var(--teal2); color: var(--dark); }
   .btn-primary:hover { background: var(--mint); }
@@ -357,10 +392,69 @@
     .fade-in.visible { opacity: 1; transform: none; }
   }
 
-  /* ── Responsive ── */
-  @media(max-width:700px) {
-    .hero { padding: 5rem 1.2rem 3rem; }
-    section { padding: 3.5rem 1.2rem; }
+  /* ── Tablet (≤900px) ── */
+  @media(max-width:900px) {
+    section { padding: 4rem 1.5rem; }
+    .hero { padding: 4.5rem 1.5rem 3.5rem; }
+    .section-sub { margin-bottom: 2rem; }
+    .stats-grid { grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:1rem; }
+    .phases-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+    .declaration-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ── Mobile (≤640px) ── */
+  @media(max-width:640px) {
+    nav .brand { font-size: 0.8rem; }
+    .nav-links { display: none; }
+    .nav-toggle { display: flex; }
+
+    .hero { padding: 4rem 1.2rem 2.5rem; min-height: 100svh; }
+    .hero h1 { font-size: clamp(1.8rem, 8vw, 2.6rem); }
+    .hero-sub { font-size: 0.95rem; }
+    .hero-cta { flex-direction: column; gap: 0.6rem; }
+    .btn { justify-content: center; width: 100%; max-width: 280px; }
+
+    section { padding: 3rem 1.1rem; }
+    .section-title { font-size: clamp(1.4rem, 5vw, 2rem); }
+    .section-sub { font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+    .stats-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .stat-val { font-size: 2.6rem; }
+
+    .two-col { grid-template-columns: 1fr; gap: 1rem; }
+
+    .principle-banner { font-size: 1rem; padding: 1rem 1.2rem; }
+    .principles-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .principle-card { padding: 1.4rem 1rem; }
+    .principle-icon { font-size: 1.8rem; margin-bottom: 0.6rem; }
+    .principle-card h3 { font-size: 0.95rem; }
+    .principle-card p { font-size: 0.8rem; }
+
+    .strategy-header { font-size: 0.95rem; padding: 0.8rem 1rem; }
+    .strategy-body { padding: 0.9rem 1rem; }
+    .strategy-item { font-size: 0.88rem; }
+
+    .phases-grid { grid-template-columns: 1fr; }
+    .phase-card { padding: 1.5rem 1.2rem; }
+
+    .students-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+    .competency-item { grid-template-columns: 90px 1fr; }
+    .comp-label { font-size: 0.82rem; }
+    .comp-desc { font-size: 0.85rem; padding: 0.8rem; }
+
+    .declaration-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .decl-card { padding: 1.5rem 1.2rem; }
+
+    .closing-quote { font-size: clamp(1.4rem, 6vw, 2rem); }
+    .closing-mission { font-size: 0.95rem; }
+  }
+
+  /* ── Small phone (≤380px) ── */
+  @media(max-width:380px) {
+    nav .brand { font-size: 0.72rem; }
+    .hero h1 { font-size: 1.7rem; }
+    .principles-grid { grid-template-columns: 1fr; }
+    .competency-item { grid-template-columns: 80px 1fr; }
   }
 </style>
 </head>
@@ -368,15 +462,30 @@
 
 <nav>
   <div class="brand">🎓 花蓮高中 AI 教學策略</div>
-  <a href="#stats">現況</a>
-  <a href="#findings">研究發現</a>
-  <a href="#principles">核心原則</a>
-  <a href="#strategies">四大策略</a>
-  <a href="#phases">增能計畫</a>
-  <a href="#students">學生素養</a>
-  <a href="#levels">AI 分級</a>
-  <a href="#declaration">行動宣言</a>
+  <div class="nav-links">
+    <a href="#stats">現況</a>
+    <a href="#findings">研究發現</a>
+    <a href="#principles">核心原則</a>
+    <a href="#strategies">四大策略</a>
+    <a href="#phases">增能計畫</a>
+    <a href="#students">學生素養</a>
+    <a href="#levels">AI 分級</a>
+    <a href="#declaration">行動宣言</a>
+  </div>
+  <button class="nav-toggle" id="nav-toggle" aria-label="開啟選單">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="nav-drawer" id="nav-drawer">
+  <a href="#stats" onclick="closeNav()">01 · 現況與數據</a>
+  <a href="#findings" onclick="closeNav()">02 · 研究發現</a>
+  <a href="#principles" onclick="closeNav()">03 · 核心原則</a>
+  <a href="#strategies" onclick="closeNav()">04 · 四大策略</a>
+  <a href="#phases" onclick="closeNav()">05 · 增能計畫</a>
+  <a href="#students" onclick="closeNav()">06 · 學生素養</a>
+  <a href="#levels" onclick="closeNav()">07 · AI 分級架構</a>
+  <a href="#declaration" onclick="closeNav()">08 · 行動宣言</a>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="top">
@@ -809,7 +918,6 @@
 </footer>
 
 <script>
-  // Intersection Observer for fade-in
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -817,9 +925,24 @@
         observer.unobserve(e.target);
       }
     });
-  }, { threshold: 0.12 });
-
+  }, { threshold: 0.1 });
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  const toggle = document.getElementById('nav-toggle');
+  const drawer = document.getElementById('nav-drawer');
+  toggle.addEventListener('click', () => {
+    const open = drawer.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-label', open ? '關閉選單' : '開啟選單');
+  });
+  function closeNav() {
+    drawer.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-label', '開啟選單');
+  }
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('nav') && !e.target.closest('.nav-drawer')) closeNav();
+  });
 </script>
 </body>
 </html>
